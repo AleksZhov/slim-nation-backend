@@ -1,3 +1,4 @@
 "use strict";
 const products = require("./products");
-module.exports = { products };
+const users = require("./users");
+module.exports = { products, users };

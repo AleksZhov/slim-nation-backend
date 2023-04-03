@@ -9,6 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const deleteOne = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const { Product } = require('../../models/');
+const createError = require("http-errors");
+const deleteOne = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.body;
+    try {
+        const deletedProduct = yield Product.findByIdAndRemove(id);
+        console.log('deletedProduct: ', deletedProduct);
+        if (deletedProduct) {
+            res.status(201).json(deletedProduct);
+        }
+        else if (deletedProduct === null) {
+            next(createError(404, "Product with this id does not exist"));
+        }
+    }
+    catch (error) {
+        next(createError(404, error.message));
+    }
 });
 module.exports = deleteOne;

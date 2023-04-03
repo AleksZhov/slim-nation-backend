@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const { Product } = require('../../models');
 const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield Product.find({});
-    res.json({
+    res.status(200).json({
         status: "success",
         code: 200,
         data: { result }

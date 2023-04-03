@@ -9,15 +9,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = require("express");
-const { products: { getAll, addOne, deleteOne } } = require("../../controllers/");
-const { ctrlWrapper } = require('../../helpers/');
-const router = express.Router();
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () { ctrlWrapper(getAll(req, res)); }));
-router.post("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    ctrlWrapper(addOne(req, res, next));
-}));
-router.delete("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    ctrlWrapper(deleteOne(req, res, next));
-}));
-module.exports = router;
+const bcrypt = require('bcrypt');
+const createError = require("http-errors");
+const { User } = require("../../models/");
+const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, email, password } = req.body;
+    const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const requestedUser = yield User.find({ email });
+    if (requestedUser.length > 0) {
+        next(createError(409, "Email in use"));
+    }
+    ;
+    const newUser = yield User.create({
+        email,
+        name,
+        password: hashPassword,
+    });
+    res.status(201).json({
+        user: {
+            email: newUser.email,
+            name: newUser.name,
+        }
+    });
+});
+module.exports = createUser;
