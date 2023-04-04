@@ -12,7 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = require('bcrypt');
 const createError = require("http-errors");
 const { User } = require("../../models/");
+const validationSchemas_1 = require("../../validationSchemas/validationSchemas");
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = validationSchemas_1.signInReqBodyValidSchema.validate(req.body);
+    if (error) {
+        next(createError(400, error.message));
+    }
+    ;
     const { name, email, password } = req.body;
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     const requestedUser = yield User.find({ email });
@@ -24,6 +30,8 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         email,
         name,
         password: hashPassword,
+        accessToken: '',
+        refreshToken: ''
     });
     res.status(201).json({
         user: {
