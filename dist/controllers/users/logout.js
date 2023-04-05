@@ -9,21 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { Product } = require('../../models/');
+const bcrypt = require('bcrypt');
 const createError = require("http-errors");
-const deleteOne = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.body;
-    try {
-        const deletedProduct = yield Product.findByIdAndRemove(id);
-        if (deletedProduct) {
-            res.status(201).json(deletedProduct);
-        }
-        else if (deletedProduct === null || !id) {
-            next(createError(404, "Product with this id does not exist"));
-        }
-    }
-    catch (error) {
-        next(createError(404, error.message));
-    }
+const { User } = require("../../models/");
+const { auth } = require("../../midlwares");
+const logout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const currentUser = yield auth(req, res, next);
+    console.log('currentUser: ', currentUser);
+    yield User.findByIdAndUpdate(currentUser._id, { accessToken: "", refreshToken: "" });
+    res.status(204).json({});
 });
-module.exports = deleteOne;
+module.exports = logout;

@@ -6,7 +6,8 @@ const productSchema =new Schema({
     protein: {type:Number, required:[true, "Missing protein field"]},
     fat: {type:Number, required:[true, "Missing fat field"]},
     carbs: {type:Number, required:[true, "Missing carbs field"]},
-    fiber: {type:Number, required:[true, "Missing fiber field"]}
+    fiber: { type: Number, required: [true, "Missing fiber field"] },
+    owner:{type:Schema.Types.ObjectId, ref:"user"}
 });
 
 const Product = model("product", productSchema);

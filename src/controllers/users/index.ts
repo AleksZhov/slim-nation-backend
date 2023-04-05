@@ -1,3 +1,5 @@
 const createUser = require("./createUser");
 const login = require("./login")
-module.exports = { createUser, login}
+const logout = require("./logout")
+const refresh = require("./refresh")
+module.exports = { createUser, login, logout, refresh}

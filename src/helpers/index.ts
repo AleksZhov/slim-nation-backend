@@ -1,2 +1,4 @@
+
 const ctrlWrapper = require('./ctrlWrapper');
-module.exports = {ctrlWrapper}
+const createJWTForUser = require("./createJWT")
+module.exports = {ctrlWrapper,createJWTForUser}

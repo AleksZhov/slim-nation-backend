@@ -10,8 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { Product } = require('../../models');
-const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield Product.find({});
+const { auth } = require("../../midlwares");
+const getAll = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const currentUser = yield auth(req, res, next);
+    const result = yield Product.find({ owner: currentUser.id });
     res.status(200).json({
         status: "success",
         code: 200,
