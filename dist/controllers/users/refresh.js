@@ -23,22 +23,23 @@ const refresh = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         if (bearer !== "Bearer") {
             next(createError(401, " Not authorized"));
         }
-        ;
-        try {
-            const { id } = jwt.verify(token, JWT_SECRET_KEY);
-            const currentUser = yield User.findById(id);
-            if (!currentUser || !currentUser.refreshToken || currentUser.refreshToken === "") {
-                next(createError(401, "Not authorized"));
+        else {
+            try {
+                const { id } = jwt.verify(token, JWT_SECRET_KEY);
+                const currentUser = yield User.findById(id);
+                if (!currentUser || !currentUser.refreshToken || currentUser.refreshToken === "") {
+                    next(createError(401, "Not authorized"));
+                }
+                ;
+                const accessToken = createJWTForUser(currentUser._id, "15m");
+                const refreshToken = createJWTForUser(currentUser._id, "7d");
+                const refreshedUser = yield User.findByIdAndUpdate(currentUser._id, { refreshToken, accessToken }, { returnDocument: "after" });
+                res.status(201).json({ user: { name: refreshedUser.name, email: refreshedUser.email }, accessToken: refreshedUser.accessToken, refreshToken: refreshedUser.refreshToken });
             }
-            ;
-            const accessToken = createJWTForUser(currentUser._id, "15m");
-            const refreshToken = createJWTForUser(currentUser._id, "7d");
-            const refreshedUser = yield User.findByIdAndUpdate(currentUser._id, { refreshToken, accessToken }, { returnDocument: "after" });
-            res.status(201).json({ user: { name: refreshedUser.name, email: refreshedUser.email }, accessToken: refreshedUser.accessToken, refreshToken: refreshedUser.refreshToken });
-        }
-        catch (error) {
-            if (error.message === "invalid signature") {
-                next(createError(401, "invalid signature"));
+            catch (error) {
+                if (error.message === "invalid signature") {
+                    next(createError(401, "invalid signature"));
+                }
             }
         }
     }

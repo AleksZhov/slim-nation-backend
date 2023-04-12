@@ -14,8 +14,8 @@ const refresh = async (req: Request, res: Response, next: NextFunction) => {
     if (authorization) {
         const [bearer, token] = authorization.split(" ");
       
-        if (bearer !== "Bearer") { next(createError(401, " Not authorized")) };
-           try {
+        if (bearer !== "Bearer") { next(createError(401, " Not authorized")) } else {
+              try {
            const { id } = jwt.verify(token, JWT_SECRET_KEY);
            
         const currentUser = await User.findById(id);
@@ -31,7 +31,7 @@ const refresh = async (req: Request, res: Response, next: NextFunction) => {
                next(createError(401, "invalid signature"))
            }
        }
-
+        }
     }
 };
 module.exports = refresh;

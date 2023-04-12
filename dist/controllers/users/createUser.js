@@ -18,26 +18,28 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     if (error) {
         next(createError(400, error.message));
     }
-    ;
-    const { name, email, password } = req.body;
-    const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    const requestedUser = yield User.find({ email });
-    if (requestedUser.length > 0) {
-        next(createError(409, "Email in use"));
-    }
-    ;
-    const newUser = yield User.create({
-        email,
-        name,
-        password: hashPassword,
-        accessToken: '',
-        refreshToken: ''
-    });
-    res.status(201).json({
-        user: {
-            email: newUser.email,
-            name: newUser.name,
+    else {
+        const { name, email, password } = req.body;
+        const requestedUser = yield User.find({ email });
+        if (requestedUser.length > 0) {
+            next(createError(409, "Email in use"));
         }
-    });
+        else {
+            const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+            const newUser = yield User.create({
+                email,
+                name,
+                password: hashPassword,
+                accessToken: '',
+                refreshToken: ''
+            });
+            res.status(201).json({
+                user: {
+                    email: newUser.email,
+                    name: newUser.name,
+                }
+            });
+        }
+    }
 });
 module.exports = createUser;

@@ -15,8 +15,9 @@ const { User } = require("../../models/");
 const { auth } = require("../../midlwares");
 const logout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const currentUser = yield auth(req, res, next);
-    console.log('currentUser: ', currentUser);
-    yield User.findByIdAndUpdate(currentUser._id, { accessToken: "", refreshToken: "" });
-    res.status(204).json({});
+    if (currentUser) {
+        yield User.findByIdAndUpdate(currentUser._id, { accessToken: "", refreshToken: "" });
+        res.status(204).json({});
+    }
 });
 module.exports = logout;

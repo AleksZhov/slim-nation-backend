@@ -19,21 +19,24 @@ const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     if (error) {
         next(createError(400, error.message));
     }
-    ;
-    const { email, password } = req.body;
-    const requestedUser = yield User.findOne({ email });
-    if (!requestedUser) {
-        next(createError(401, "Email or password wrong"));
+    else {
+        const { email, password } = req.body;
+        const requestedUser = yield User.findOne({ email });
+        if (!requestedUser) {
+            next(createError(401, "Email or password wrong"));
+        }
+        else {
+            const result = bcrypt.compareSync(password, requestedUser.password);
+            if (!result) {
+                next(createError(401, "Email or password wrong"));
+            }
+            else {
+                const accessToken = createJWTForUser(requestedUser._id, "15m");
+                const refreshToken = createJWTForUser(requestedUser._id, "7d");
+                const refreshedUser = yield User.findByIdAndUpdate(requestedUser._id, { accessToken, refreshToken }, { returnDocument: "after" });
+                res.status(201).json({ user: { name: refreshedUser.name, email: refreshedUser.email }, accessToken: refreshedUser.accessToken, refreshToken: refreshedUser.refreshToken });
+            }
+        }
     }
-    ;
-    const result = bcrypt.compareSync(password, requestedUser.password);
-    if (!result) {
-        next(createError(401, "Email or password wrong"));
-    }
-    ;
-    const accessToken = createJWTForUser(requestedUser._id, "15m");
-    const refreshToken = createJWTForUser(requestedUser._id, "7d");
-    const refreshedUser = yield User.findByIdAndUpdate(requestedUser._id, { accessToken, refreshToken }, { returnDocument: "after" });
-    res.status(201).json({ user: { name: refreshedUser.name, email: refreshedUser.email }, accessToken: refreshedUser.accessToken, refreshToken: refreshedUser.refreshToken });
 });
 module.exports = loginUser;

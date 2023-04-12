@@ -8,12 +8,14 @@ import { signInReqBodyValidSchema } from "../../validationSchemas/validationSche
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
     const { error } = signInReqBodyValidSchema.validate(req.body);
-    if (error) { next(createError(400, error.message)) };
+    if (error) { next(createError(400, error.message)) }
+    else {
     const { name, email, password } = req.body;
 
-    const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+   
     const requestedUser = await User.find({email})
-    if (requestedUser.length > 0) { next(createError(409, "Email in use")) };
+        if (requestedUser.length > 0) { next(createError(409, "Email in use")) }else{
+         const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     const newUser = await User.create({
         email,
         name,
@@ -26,7 +28,8 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
             email: newUser.email,
         name:newUser.name,}
     })
-
+            }
+}
 }
 
 module.exports = createUser;
