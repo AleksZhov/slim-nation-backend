@@ -13,11 +13,14 @@ const bcrypt = require('bcrypt');
 const createError = require("http-errors");
 const { User } = require("../../models/");
 const { auth } = require("../../midlwares");
-const logout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const currentUser = yield auth(req, res, next);
-    if (currentUser) {
+const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { currentUser, error } = yield auth(req, res);
+    if (!error) {
         yield User.findByIdAndUpdate(currentUser._id, { accessToken: "", refreshToken: "" });
         res.status(204).json({});
+    }
+    else {
+        res.status(401).json({ message: error.message });
     }
 });
 module.exports = logout;

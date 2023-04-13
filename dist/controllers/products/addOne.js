@@ -19,7 +19,7 @@ const addOne = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         next(createError(400, error.message));
     }
     ;
-    const currentUser = yield auth(req, res, next);
+    const { currentUser } = yield auth(req, res);
     try {
         const newProduct = yield Product.create(Object.assign(Object.assign({}, req.body), { owner: currentUser._id }));
         res.status(201).json({ newProduct });

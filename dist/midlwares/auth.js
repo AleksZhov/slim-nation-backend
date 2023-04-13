@@ -14,26 +14,28 @@ const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 const { JWT_SECRET_KEY } = process.env;
-const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const auth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { authorization } = req.headers;
     if (authorization) {
         const [bearer, token] = authorization.split(" ");
         if (bearer !== "Bearer") {
-            next(createError(401, " Not authorized"));
+            return { currentUser: null, error: "Not authorized" };
         }
         ;
         try {
             const { id } = jwt.verify(token, JWT_SECRET_KEY);
-            const currentUser = yield User.findById(id);
-            if (!currentUser || !currentUser.accessToken || currentUser.accessToken === "") {
-                next(createError(401, "Not authorized"));
+            if (id) {
+                const currentUser = yield User.findById(id);
+                if (!currentUser || !currentUser.accessToken || currentUser.accessToken === "") {
+                    return { currentUser: null, error: "Not authorized" };
+                }
+                ;
+                return { currentUser, error: null };
             }
-            ;
-            return currentUser;
         }
         catch (error) {
             if (error.message === "invalid signature") {
-                next(createError(401, "invalid signature"));
+                return { currentUser: null, error: error.message };
             }
         }
     }

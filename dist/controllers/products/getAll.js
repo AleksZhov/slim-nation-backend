@@ -11,15 +11,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const { Product } = require('../../models');
 const { auth } = require("../../midlwares");
-const getAll = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const currentUser = yield auth(req, res, next);
-    if (currentUser) {
+const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { currentUser, error } = yield auth(req, res);
+    if (!error) {
         const result = yield Product.find({ owner: currentUser._id });
         res.status(200).json({
             status: "success",
             code: 200,
             data: result
         });
+    }
+    else {
+        res.status(401).json({ message: error });
     }
 });
 module.exports = getAll;

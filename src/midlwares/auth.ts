@@ -6,24 +6,25 @@ require('dotenv').config();
 
 const { JWT_SECRET_KEY } = process.env;
 
-const auth = async (req: Request, res: Response, next: NextFunction) => {
+const auth = async (req: Request, res: Response) => {
     const { authorization } = req.headers;
   
     if (authorization) {
         const [bearer, token] = authorization.split(" ");
       
-        if (bearer !== "Bearer") { next(createError(401, " Not authorized")) };
+        if (bearer !== "Bearer") { return {currentUser:null, error: "Not authorized"}  };
 
        try {
            const { id } = jwt.verify(token, JWT_SECRET_KEY);
-           
-        const currentUser = await User.findById(id);
-           if (!currentUser || !currentUser.accessToken || currentUser.accessToken === "") { next(createError(401, "Not authorized")) };
-           return currentUser;
-       } catch (error:any) {
+        if(id){const currentUser = await User.findById(id);
+           if (!currentUser || !currentUser.accessToken || currentUser.accessToken === "") { return {currentUser:null, error: "Not authorized"} };
+           return { currentUser, error:null };}
+       } catch (error: any) {
            if (error.message === "invalid signature") {
-               next(createError(401, "invalid signature"))
+            //    next(createError(401, "invalid signature"))
+               return {currentUser:null, error:error.message}
            }
+        //    if(error.message === "jwt expired"){next(createError(401, "jwt expired"))}
        }
     }
 }
