@@ -13,11 +13,13 @@ const { Product } = require('../../models');
 const { auth } = require("../../midlwares");
 const getAll = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const currentUser = yield auth(req, res, next);
-    const result = yield Product.find({ owner: currentUser.id });
-    res.status(200).json({
-        status: "success",
-        code: 200,
-        data: { result }
-    });
+    if (currentUser) {
+        const result = yield Product.find({ owner: currentUser._id });
+        res.status(200).json({
+            status: "success",
+            code: 200,
+            data: result
+        });
+    }
 });
 module.exports = getAll;
