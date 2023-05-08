@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createProductBodyValidShema = exports.signInReqBodyValidSchema = exports.loginReqBodyValidSchema = void 0;
+exports.createNewMealBodyValidSchema = exports.createProductBodyValidShema = exports.signInReqBodyValidSchema = exports.loginReqBodyValidSchema = void 0;
 const Joi = require('joi');
 exports.loginReqBodyValidSchema = Joi.object({
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua'] } }).required(),
@@ -18,4 +18,8 @@ exports.createProductBodyValidShema = Joi.object({
     fat: Joi.number().required(),
     carbs: Joi.number().required(),
     fiber: Joi.number().required(),
+});
+exports.createNewMealBodyValidSchema = Joi.object({
+    mealID: Joi.string().min(20).max(25).required(),
+    mealWeight: Joi.number().min(0).max(5000).required()
 });

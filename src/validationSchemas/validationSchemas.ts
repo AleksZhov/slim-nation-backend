@@ -22,3 +22,8 @@ export const createProductBodyValidShema = Joi.object({
     carbs:Joi.number().required(),
     fiber:Joi.number().required(),
 })
+
+export const createNewMealBodyValidSchema = Joi.object({
+    mealID: Joi.string().min(20).max(25).required(),
+    mealWeight:Joi.number().min(0).max(5000).required()
+})

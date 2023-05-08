@@ -19,8 +19,5 @@ const addOne = async(req: Request, res: Response,next:NextFunction) => {
         
     }
    
-   
-
-
 }
 module.exports =  addOne ;
