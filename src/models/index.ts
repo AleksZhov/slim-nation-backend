@@ -1,5 +1,6 @@
 import {model} from 'mongoose'
 const Product = require('./product');
-const User = require('./user');
+const User = require('./user'); 
+const DailyRation = require("./dailyRation")
 
-module.exports = {Product, User}
+module.exports = {Product, User, DailyRation}

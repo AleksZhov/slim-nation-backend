@@ -6,6 +6,7 @@ import { Request, Response, NextFunction, } from 'express';
 
 const usersRouter = require("./routes/api/users");
 const productsRouter = require("./routes/api/products")
+const dailyRationRouter = require("./routes/api/dailyRation")
 
 
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
+app.use("/api/daily-ration", dailyRationRouter);
 
 
 app.use((req: Request, res: Response, next:NextFunction) => {

@@ -1,3 +1,4 @@
 const products = require("./products");
 const users = require("./users")
-module.exports = {products, users}
+const dailyRation = require("./dailyRations")
+module.exports = {products, users, dailyRation}

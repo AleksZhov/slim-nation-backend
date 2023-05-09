@@ -24,6 +24,14 @@ export const createProductBodyValidShema = Joi.object({
 })
 
 export const createNewMealBodyValidSchema = Joi.object({
-    mealID: Joi.string().min(20).max(25).required(),
-    mealWeight:Joi.number().min(0).max(5000).required()
+    date:Joi.string().min(8).max(15).required(),
+    currentDish: Joi.object({
+       productName: {type:String, required:[true, "Missing productName field"]},
+    energy: {type:Number, required:[true, "Missing energy field"]},
+    protein: {type:Number, required:[true, "Missing protein field"]},
+    fat: {type:Number, required:[true, "Missing fat field"]},
+    carbs: {type:Number, required:[true, "Missing carbs field"]},
+        fiber: { type: Number, required: [true, "Missing fiber field"] },
+    weight:Joi.number().greater(0).less(5000).required()
+    })
 })
