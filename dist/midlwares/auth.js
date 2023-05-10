@@ -25,9 +25,8 @@ const auth = async (req, res) => {
             }
         }
         catch (error) {
-            if (error.message === "invalid signature") {
-                return { currentUser: null, error: error.message };
-            }
+            console.log(error.message);
+            return { currentUser: null, error: error.message };
         }
     }
 };

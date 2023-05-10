@@ -16,15 +16,13 @@ const auth = async (req: Request, res: Response) => {
 
        try {
            const { id } = jwt.verify(token, JWT_SECRET_KEY);
+     
         if(id){const currentUser = await User.findById(id);
            if (!currentUser || !currentUser.accessToken || currentUser.accessToken === "") { return {currentUser:null, error: "Not authorized"} };
-           return { currentUser, error:null };}
+           return { currentUser, error:null }}
        } catch (error: any) {
-           if (error.message === "invalid signature") {
-            //    next(createError(401, "invalid signature"))
+           console.log(error.message)
                return {currentUser:null, error:error.message}
-           }
-        //    if(error.message === "jwt expired"){next(createError(401, "jwt expired"))}
        }
     }
 }

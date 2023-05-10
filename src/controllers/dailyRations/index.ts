@@ -1,3 +1,5 @@
-const getOne = require("./getOne");
+const getOneDailyRation = require("./getOneDailyRation");
+const createMealDish = require("./createMealDish")
+const deleteMealDish = require("./deleteMealDish")
 
-module.exports = {getOne}
+module.exports = {getOneDailyRation,createMealDish, deleteMealDish}

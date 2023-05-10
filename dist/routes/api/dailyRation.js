@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const { ctrlWrapper } = require('../../helpers/');
-const { dailyRation: { getOne } } = require("../../controllers");
+const { dailyRation: { getOneDailyRation, createMealDish, deleteMealDish } } = require("../../controllers");
 const router = express.Router();
-router.get("/", async (req, res) => { ctrlWrapper(getOne(req, res)); });
-router.post("/", async (req, res) => { ctrlWrapper(getOne(req, res)); });
+router.get("/", async (req, res, next) => { ctrlWrapper(getOneDailyRation(req, res, next)); });
+router.post("/", async (req, res, next) => { ctrlWrapper(createMealDish(req, res, next)); });
+router.delete("/", async (req, res, next) => { ctrlWrapper(deleteMealDish(req, res, next)); });
 module.exports = router;

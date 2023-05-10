@@ -2,12 +2,16 @@ const express = require("express");
 
 import { NextFunction, Request, Response } from "express";
 const { ctrlWrapper } = require('../../helpers/')
-const {dailyRation:{getOne}} = require("../../controllers")
+const {dailyRation:{getOneDailyRation,createMealDish, deleteMealDish}} = require("../../controllers")
 
 const router = express.Router();
 
 
-router.get("/", async (req: Request, res: Response) => { ctrlWrapper(getOne(req, res)) })
+router.get("/", async (req: Request, res: Response, next:NextFunction) => { ctrlWrapper(getOneDailyRation(req, res, next)) })
 
-router.post("/", async (req: Request, res: Response) => { ctrlWrapper(getOne(req, res)) })
+router.post("/", async (req: Request, res: Response, next:NextFunction) => { ctrlWrapper(createMealDish(req, res, next)) })
+
+
+router.delete("/", async (req: Request, res: Response, next:NextFunction) => { ctrlWrapper(deleteMealDish(req, res, next)) })
+
 module.exports = router;
