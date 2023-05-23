@@ -16,7 +16,6 @@ const createMealDish = async (req, res, next) => {
             next(createError(403, error));
         }
         else {
-            console.log("Bingo+++++++++++");
             try {
                 const currentDay = await DailyRation.findOne({ owner: currentUser._id, date: req.body.date });
                 if (currentDay) {
