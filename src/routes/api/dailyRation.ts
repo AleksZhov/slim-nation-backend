@@ -7,7 +7,7 @@ const {dailyRation:{getOneDailyRation,createMealDish, deleteMealDish}} = require
 const router = express.Router();
 
 
-router.get("/", async (req: Request, res: Response, next:NextFunction) => { ctrlWrapper(getOneDailyRation(req, res, next)) })
+router.post("/meals/", async (req: Request, res: Response, next:NextFunction) => { ctrlWrapper(getOneDailyRation(req, res, next)) })
 
 router.post("/", async (req: Request, res: Response, next:NextFunction) => { ctrlWrapper(createMealDish(req, res, next)) })
 

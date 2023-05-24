@@ -19,7 +19,7 @@ const deleteMealDish = async (req: Request, res: Response, next: NextFunction) =
                     if (result) {
                         currentDay.dailyDishes.id(req.body.id).deleteOne();
                          await currentDay.save();
-                    res.status(204);
+                    res.status(201).json(currentDay);
                     } else {
                         next(createError( 400, `Not found dish with ${req.body.id} id `))
                     }}

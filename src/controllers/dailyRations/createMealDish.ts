@@ -13,7 +13,7 @@ const createMealDish = async (req: Request, res: Response, next:NextFunction) =>
     else {
         const { currentUser, error } = await auth(req, res)
         if (error) {
-            console.log(typeof error)
+           
             next(createError(403, error))
         } else {
             try {
